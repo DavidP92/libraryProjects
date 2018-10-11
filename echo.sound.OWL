@@ -1,0 +1,69 @@
+#define trigPin A4
+#define echoPin A5
+
+const int REC=2, PLAYE=3, PLAYL=4, FT=5;
+
+void setup(){
+ Serial.begin(9600);
+ pinMode(trigPin, OUTPUT);
+ pinMode(echoPin, INPUT);
+}
+
+void record(){
+ Serial.println("Recording for 10 seconds...");
+ digitalWrite(REC, HIGH);
+ delay(5000);
+ digitalWrite(REC, LOW);
+}
+void play_e(){
+ Serial.println("Now playing...");
+ digitalWrite(PLAYE, HIGH);
+ delay(5000);
+ digitalWrite(PLAYE, LOW);
+ }
+void play_l(){
+ Serial.println("Now playing for 5 seconds...");
+ digitalWrite(PLAYL, HIGH);
+ delay(5000);
+ digitalWrite(PLAYL, LOW);
+}
+void live(){
+ Serial.println("Mic feed through for 10 meconds");
+ digitalWrite(FT, HIGH);
+ delay(10000);
+ digitalWrite(FT, LOW);
+}
+
+
+void loop(){
+
+  long duration, inches, cm;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, LOW);
+  
+
+  duration = pulseIn(echoPin, HIGH);  
+  inches = microsecondsToInches(duration);
+  cm = microsecondsToCentimeters(duration);
+
+  Serial.print(inches);
+  Serial.print("in, ");
+  Serial.print(cm);
+  Serial.print("cm, ");
+  Serial.println();
+  delay(1000);
+
+  if (inches < 30){
+    play_e();
+}
+}
+long microsecondsToInches(long microseconds) {
+  return microseconds / 74 / 2;
+}
+
+long microsecondsToCentimeters(long microseconds){
+  return microseconds * .0343 / 2;
+}
